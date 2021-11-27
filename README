@@ -22,3 +22,6 @@ kubectl edit configmap calculateme-configmap
 kind create cluster --config=./kind.yaml
 
 https://github.com/stakater/Reloader
+
+Note: if your cluster is deployed manually with `kubeadm` you might want to use branch `manual-cluster-branch`.
+It has additional manifest for creating a PersistentVolume resource so pods can work properly.
