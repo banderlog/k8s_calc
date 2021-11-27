@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  bc:
+    build:
+      context: .
+      args:
+        build_input: ${FOO}
+      dockerfile: Dockerfile
+    # it will block bash-defined envs
+    env_file: compose.env
+    # environment:
+      # funny, it will not work if "3+4" and in .env file
+      # - INPUT=3+4
+      # now it can be passed from bash
+      # - INPUT=${INPUT}
+    volumes:
+      - exch_vol:/data
+  output:
+    image: busybox
+    depends_on:
+      - bc
+    volumes:
+      - exch_vol:/tmp
+    command: sh -c "cat /tmp/out.txt"
+
+volumes:
+  exch_vol:

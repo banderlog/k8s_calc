@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    configmap.reloader.stakater.com/reload: "calculateme-configmap"
+  labels:
+    app: bc
+  name: bc
+spec:
+  replicas: 1
+  # strategy:
+    # type: Recreate
+  selector:
+    matchLabels:
+      app: bc
+  template:
+    metadata:
+      labels:
+        app: bc
+    spec:
+      # https://stackoverflow.com/questions/63400156/configure-restart-policy-of-pod-from-deployment-config
+      # restartPolicy: Never
+      containers:
+        - name: bc
+          image: busybox
+          command: ['sh']
+          # args: ["-c", "echo WOLOLO; echo ${INPUT} | bc  > '/tmp/index.html' && ping 8.8.8.8"]
+          args: ["-c", "echo WOLOLO; echo ${INPUT} | bc -l > '/tmp/index.html'"]
+          env:
+            - name: INPUT
+              valueFrom:
+                  configMapKeyRef:
+                      name: calculateme-configmap
+                      key: calculateme
+          volumeMounts:
+            - mountPath: /tmp
+              name: exch-vol
+      restartPolicy: Always
+      volumes:
+        - name: exch-vol
+          persistentVolumeClaim:
+            claimName: exch-vol

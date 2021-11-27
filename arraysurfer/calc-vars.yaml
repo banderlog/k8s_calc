@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: calculateme
+data:
+    calculateme: 3+8
