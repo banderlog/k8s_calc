@@ -12,3 +12,13 @@ Powered with cutting edge *Foretold Termination™* technology, famous "less tha
 ```
 kind create cluster --config=./kind.yaml
 ```
+
+### Folders
+
+**NB:** each folder has it's own README.md
+
++ arraysurfer -- k8s version with init pod
++ bc_container -- from scratch docker container for calculations
++ compose -- docker compose version
++ k8-calc -- help chart ready folder of k8s folder
++ k8s -- k8s version with reloader and nginx
