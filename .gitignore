@@ -1,0 +1,9 @@
+__pycache__
+.mypy_cache
+.ipynb_checkpoints
+*.swp
+*.csv
+.~lock.*
+venv
+pic/*
+!pic/header.png
