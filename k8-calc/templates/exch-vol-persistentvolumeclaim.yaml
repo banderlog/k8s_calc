@@ -6,6 +6,8 @@ metadata:
     volume: exch-vol
   name: exch-vol
 spec:
+#storageClassName required, see https://kubernetes.io/docs/concepts/storage/storage-classes/
+  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:
