@@ -2,23 +2,38 @@
 
 ![globohomo art style](pic/header.png)
 
-Powered with cutting edge *Foretold Termination™* technology, famous "less than 10 seconds" calculator on kubernetes.
-*Foretold Termination™* technology saves time on container unload.
+Powered with cutting edge *Foretold Termination™* technology (saves time on container unload), famous "less than 10 seconds" calculator on kubernetes.
 
->Deploying applications to Kubernetes is not a straightforward process
 
-### Cluster creation with `kind`
+## Prerequisites
+
++ [docker](https://docs.docker.com/engine/install/ubuntu/)
++ [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) (or any other k8s cluster)
++ [kubectl](https://kubernetes.io/docs/tasks/tools/)
++ [helm](https://helm.sh/docs/intro/install/)
+
+
+## Installation and usage
 
 ```
+# cluster creation with `kind`
 kind create cluster --config=./kind.yaml
+
+# installlation
+helm install k8-calc k8-calc/
+
+# verification -- should output "69"
+curl http://localhost:30000/
 ```
 
-### Folders
+For different calculation *simply* run `kubectl edit configmap calculateme-configmap` and change `calculateme: 60+9` line.
 
-**NB:** each folder has it's own README.md
+Run `kind delete cluster` to remove everything.
 
-+ arraysurfer -- k8s version with init pod
-+ bc_container -- from scratch docker container for calculations
-+ compose -- docker compose version
-+ k8-calc -- help chart ready folder of k8s folder
-+ k8s -- k8s version with reloader and nginx
+
+## How it works
+
+- There is env string variable `calculateme` defined in the ConfigMap
+- A [busybox](https://busybox.net/) pod runs it through [bc](https://www.gnu.org/software/bc/), writes an answer to a file in the mounted volume and dies
+- A [nginx](https://www.nginx.com/) pod mounts this file as index.html, so it is accessible via an HTTP request
+- The [Reloader](https://github.com/stakater/Reloader) watches ConfigMap and restarts busybox pod if it changed

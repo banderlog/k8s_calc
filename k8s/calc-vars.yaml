@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-    name: calculateme-configmap
-data:
-    calculateme: 60+9-1.2

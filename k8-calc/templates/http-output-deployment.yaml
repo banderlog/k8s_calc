@@ -15,17 +15,15 @@ spec:
         app: output
     spec:
       containers:
-        - name: output
-          image: nginx
-          # command: ['sh']
-          # args: ["-c", "cat /tmp/out.txt > /usr/share/nginx/html/index.html && ping 8.8.8.8"]
-          volumeMounts:
-            - mountPath: /usr/share/nginx/html/
-              name: exch-vol
+      - name: output
+        image: nginx
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html/
+          name: exch-vol
       volumes:
-        - name: exch-vol
-          persistentVolumeClaim:
-            claimName: exch-vol
+      - name: exch-vol
+        persistentVolumeClaim:
+          claimName: exch-vol
 ---
 apiVersion: v1
 kind: Service
@@ -36,7 +34,7 @@ spec:
   selector:
     app: output
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-      nodePort: 32000
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 32000
