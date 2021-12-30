@@ -15,20 +15,25 @@ Powered with cutting edge *Foretold Termination™* technology (saves time on co
 
 ## Installation and usage
 
+**Installation example with kind:**
 ```
 # cluster creation with `kind`
 kind create cluster --config=./kind.yaml
 
-# installlation
+# installation
 helm install k8-calc k8-calc/
 
 # verification -- should output "69"
 curl http://localhost:30000/
 ```
 
-For different calculation *simply* run `kubectl edit configmap calculateme-configmap` and change `calculateme: 60+9` line.
+**For different calculation *simply* do:**
++ run `kubectl edit configmap calculateme-configmap`
++ change `calculateme: 60+9` line, save and exit text editor
++ check `http://localhost:30000/`
 
-Run `kind delete cluster` to remove everything.
+**To remove everything:**
++ run `kind delete cluster`
 
 
 ## How it works
