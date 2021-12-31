@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,20 +18,20 @@ spec:
         app: bc
     spec:
       containers:
-      - name: bc
-        image: busybox
-        env:
-        - name: INPUT
-          valueFrom:
-            configMapKeyRef:
-              name: calculateme-configmap
-              key: calculateme
-        command: ['sh']
-        args: ["-c", "echo ${INPUT} | bc -l > '/tmp/index.html'"]
-        volumeMounts:
-        - mountPath: /tmp
-          name: exch-vol
+        - name: bc
+          image: busybox
+          env:
+            - name: INPUT
+              valueFrom:
+                configMapKeyRef:
+                  name: calculateme-configmap
+                  key: calculateme
+          command: ['sh']
+          args: ["-c", "echo ${INPUT} | bc -l > '/tmp/index.html'"]
+          volumeMounts:
+            - mountPath: /tmp
+              name: exch-vol
       volumes:
-      - name: exch-vol
-        persistentVolumeClaim:
-          claimName: exch-vol
+        - name: exch-vol
+          persistentVolumeClaim:
+            claimName: exch-vol

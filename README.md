@@ -15,22 +15,34 @@ Powered with cutting edge *Foretold Termination™* technology (saves time on co
 
 ## Installation and usage
 
-**Installation example with kind:**
+**kind cluster [with ingress preparation](https://kind.sigs.k8s.io/docs/user/ingress/#using-ingress):**
 ```
 # cluster creation with `kind`
 kind create cluster --config=./kind.yaml
 
+# ingress NGINX controller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+# wait until is ready to process requests running
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=90s
+```
+
+**k8-calc installation:**
+```
 # installation
 helm install k8-calc k8-calc/
 
 # verification -- should output "69"
-curl http://localhost:30000/
+curl localhost/k8_calc
 ```
 
 **For different calculation *simply* do:**
 + run `kubectl edit configmap calculateme-configmap`
 + change `calculateme: 60+9` line, save and exit text editor
-+ check `http://localhost:30000/`
++ check `localhost/k8_calc`
 
 **To remove everything:**
 + run `kind delete cluster`

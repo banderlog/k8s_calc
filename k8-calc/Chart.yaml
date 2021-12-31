@@ -1,3 +1,4 @@
+---
 apiVersion: v2
 name: k8_calc
 description: https://github.com/banderlog/k8s_calc

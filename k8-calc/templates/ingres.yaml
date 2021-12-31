@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    # overcome the exposed URL in the backend service
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: "/k8_calc"
+            backend:
+              service:
+                name: output-service
+                port:
+                  number: 5678
