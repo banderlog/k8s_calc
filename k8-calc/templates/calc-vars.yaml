@@ -4,4 +4,4 @@ kind: ConfigMap
 metadata:
     name: calculateme-configmap
 data:
-    calculateme: {{.Values.expression}}
+    calculateme: {{ .Values.expression }}
