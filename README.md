@@ -39,10 +39,14 @@ helm install k8-calc k8-calc/
 curl localhost/k8_calc
 ```
 
-**For different calculation *simply* do:**
-+ run `kubectl edit configmap calculateme-configmap`
-+ change `calculateme: 60+9` line, save and exit text editor
-+ check `localhost/k8_calc`
+**For different calculation you have two options:**
+1. re-deploy with new expression argument
+    + `helm install k8-calc k8-calc/ --set expression=%your_expression%`
+	+ check `localhost/k8_calc`
+2. change ConfigMap inside current deployment
+    + run `kubectl edit configmap calculateme-configmap`
+    + change `calculateme: 60+9` line, save and exit text editor
+	+ check `localhost/k8_calc`
 
 **To remove everything:**
 + run `kind delete cluster`
