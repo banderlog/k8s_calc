@@ -14,6 +14,6 @@ spec:
             path: "/k8_calc"
             backend:
               service:
-                name: output-service
+                name: {{ .Values.service.name }}
                 port:
                   number: 5678
