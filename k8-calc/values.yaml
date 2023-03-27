@@ -1,4 +1,2 @@
 ---
-service:
-  name: post-k8s-calculator
 expression: "60+9"

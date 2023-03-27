@@ -25,3 +25,16 @@ spec:
         - name: exch-vol
           persistentVolumeClaim:
             claimName: exch-vol
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: output-service
+spec:
+  selector:
+    app: output
+  ports:
+    # Default port used by the image (for Pod)
+    - targetPort: 80
+      # port on the Service
+      port: 5678
