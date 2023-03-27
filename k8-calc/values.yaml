@@ -1,2 +1,6 @@
 ---
+service:
+  name: postcog-calculator
+calcvars:
+  name: postcog-variables
 expression: "60+9"
