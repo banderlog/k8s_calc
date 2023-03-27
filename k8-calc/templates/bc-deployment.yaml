@@ -24,7 +24,7 @@ spec:
             - name: INPUT
               valueFrom:
                 configMapKeyRef:
-                  name: calculateme-configmap
+                  name: {{ .Values.calcvars.name }}
                   key: calculateme
           command: ['sh']
           args: ["-c", "echo ${INPUT} | bc -l > '/tmp/index.html'"]
