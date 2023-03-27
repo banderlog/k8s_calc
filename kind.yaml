@@ -17,3 +17,10 @@ nodes:
       - containerPort: 443
         hostPort: 443
         protocol: TCP
+          #added workers to simulate micro-cluster
+  - role: worker
+    labels:
+      tier: frontend
+  - role: worker
+    labels:
+      tier: backend
