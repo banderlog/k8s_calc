@@ -4,18 +4,12 @@ kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
   - role: control-plane
-    kubeadmConfigPatches:
-      - |
-        kind: InitConfiguration
-        nodeRegistration:
-          kubeletExtraArgs:
-            node-labels: "ingress-ready=true"
+    # 30080 is the fixed NodePort the k8-calc chart's Gateway is pinned to
+    # (see k8-calc/templates/gateway.yaml); NodePort works on any node, so
+    # unlike the old ingress-nginx setup there's no need to pin a node label
     extraPortMappings:
-      - containerPort: 80
+      - containerPort: 30080
         hostPort: 80
-        protocol: TCP
-      - containerPort: 443
-        hostPort: 443
         protocol: TCP
           #added workers to simulate micro-cluster
   - role: worker

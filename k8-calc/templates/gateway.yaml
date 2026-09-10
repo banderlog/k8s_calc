@@ -1,0 +1,33 @@
+---
+# fixed NodePort so kind's hostPort mapping (see kind.yaml) has a stable
+# target regardless of which node the nginx data-plane pod lands on
+apiVersion: gateway.nginx.org/v1alpha2
+kind: NginxProxy
+metadata:
+  name: k8-calc-nginx-proxy
+spec:
+  kubernetes:
+    service:
+      # default (Local) only forwards NodePort traffic to a node-local pod;
+      # since kind's port mapping targets one specific node, this must be
+      # Cluster so traffic gets routed there regardless of where the pod lands
+      externalTrafficPolicy: Cluster
+      nodePorts:
+        - listenerPort: 80
+          port: 30080
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: k8-calc-gateway
+spec:
+  gatewayClassName: nginx
+  infrastructure:
+    parametersRef:
+      group: gateway.nginx.org
+      kind: NginxProxy
+      name: k8-calc-nginx-proxy
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
