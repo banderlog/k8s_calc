@@ -68,6 +68,8 @@ curl localhost:30080/k8_calc
 
 ## Usage
 
+### Your expression
+
 **For different calculation you have two options:**
 1. Change calculate expression
     - Option 1: re-deploy with new expression argument
@@ -80,11 +82,16 @@ curl localhost:30080/k8_calc
     + `kubectl apply -f k8-calc/templates/bc-deployment.yaml`
 3. check `localhost:30080/k8_calc`
 
-> [!NOTE]
+> [!TIP]
 > If you in a nix devshell: just use `k8_calc_recalc %your_expression%`
 
-**To remove everything:**
-+ run `kind delete cluster`
+
+### Clean up
+
+To remove everything run `kind delete cluster`
+
+> [!TIP]
+> If you in a nix devshell: just use `k8_calc_cleanup`
 
 
 ## How it works
