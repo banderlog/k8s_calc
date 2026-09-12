@@ -1,24 +1,17 @@
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
-  annotations:
-    configmap.reloader.stakater.com/reload: "calculateme-configmap"
   labels:
     app: bc
   name: bc
 spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: bc
   template:
     metadata:
       labels:
         app: bc
     spec:
+      restartPolicy: Never
       containers:
         - name: bc
           image: busybox
@@ -37,3 +30,4 @@ spec:
         - name: exch-vol
           persistentVolumeClaim:
             claimName: exch-vol
+

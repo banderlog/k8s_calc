@@ -15,7 +15,14 @@ Powered with cutting edge *Foretold Termination™* technology (saves time on co
 
 ## Installation and usage
 
-ingress-nginx is being phased out in favor of the [Gateway API](https://gateway-api.sigs.k8s.io/), so this chart routes traffic through a `Gateway`/`HTTPRoute` served by [NGINX Gateway Fabric](https://github.com/nginx/nginx-gateway-fabric) instead of an `Ingress`.
+## nix devshell
+
+```bash
+nix develop banderlog/k8s_calc
+```
+
+
+### Long manual way
 
 **kind cluster:**
 ```
@@ -46,17 +53,21 @@ kubectl wait --namespace nginx-gateway \
 helm install k8-calc k8-calc/
 
 # verification -- should output "69"
-curl localhost/k8_calc
+curl localhost:30080/k8_calc
 ```
 
 **For different calculation you have two options:**
-1. re-deploy with new expression argument
-    + `helm install k8-calc k8-calc/ --set expression=%your_expression%`
-	+ check `localhost/k8_calc`
-2. change ConfigMap inside current deployment
-    + run `kubectl edit configmap calculateme-configmap`
-    + change `calculateme: 60+9` line, save and exit text editor
-	+ check `localhost/k8_calc`
+1. Change calculate expression
+    - Option 1: re-deploy with new expression argument
+        + `helm upgrade k8-calc k8-calc/ --set expression=%your_expression%`
+    - Option 2: change ConfigMap inside current deployment
+        + run `kubectl edit configmap calculateme-configmap`
+        + change `calculateme: 60+9` line, save and exit text editor
+2. Restart bc job
+    + `kubectl delete job bc`
+    + `kubectl apply -f k8-calc/templates/bc-deployment.yaml`
+3. check `localhost:30080/k8_calc`
+
 
 **To remove everything:**
 + run `kind delete cluster`
@@ -68,4 +79,3 @@ curl localhost/k8_calc
 - A [busybox](https://busybox.net/) pod runs it through [bc](https://www.gnu.org/software/bc/), writes an answer to a file in the mounted volume and dies
 - A [nginx](https://www.nginx.com/) pod mounts this file as index.html, so it is accessible via an HTTP request
 - A `Gateway`/`HTTPRoute` pair routes `/k8_calc` to that pod through NGINX Gateway Fabric; a fixed NodePort (set via the `NginxProxy` resource) is what `kind.yaml`'s port mapping targets
-- The [Reloader](https://github.com/stakater/Reloader) watches ConfigMap and restarts busybox pod if it changed
