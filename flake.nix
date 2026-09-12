@@ -124,6 +124,7 @@
             echo "  2. kubectl get pods  # ~30s before all load up"
             echo "  3. curl localhost:30080/k8_calc  # 69"
             echo "  4. k8_calc_recalc 2+2  # 4"
+            echo "  5. k8_calc_cleanup  # delete everything"
           '';
         };
       }

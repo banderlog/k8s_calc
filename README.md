@@ -13,25 +13,34 @@ Powered with cutting edge *Foretold Termination™* technology (saves time on co
 + [helm](https://helm.sh/docs/intro/install/)
 
 
-## Installation and usage
+## Installation
 
-## nix devshell
+### nix devshell
 
 ```bash
-nix develop banderlog/k8s_calc
+git clone github.com/banderlog/k8s_calc
+cd k8s_calc
+
+nix develop
 ```
 
 
 ### Long manual way
 
-**kind cluster:**
+```bash
+git clone github.com/banderlog/k8s_calc
+cd k8s_calc
 ```
-# cluster creation with `kind`
+
+#### kind cluster
+
+```bash
 kind create cluster --config=./kind.yaml
 ```
 
-**Gateway API:**
-```
+#### Gateway API
+
+```bash
 # Gateway API CRDs
 kubectl kustomize "https://github.com/nginx/nginx-gateway-fabric/config/crd/gateway-api/standard?ref=v2.7.0" | kubectl apply -f -
 
@@ -47,14 +56,17 @@ kubectl wait --namespace nginx-gateway \
   --timeout=90s
 ```
 
-**k8-calc installation:**
-```
+#### k8-calc installation
+
+```bash
 # installation
 helm install k8-calc k8-calc/
 
 # verification -- should output "69"
 curl localhost:30080/k8_calc
 ```
+
+## Usage
 
 **For different calculation you have two options:**
 1. Change calculate expression
@@ -68,6 +80,8 @@ curl localhost:30080/k8_calc
     + `kubectl apply -f k8-calc/templates/bc-deployment.yaml`
 3. check `localhost:30080/k8_calc`
 
+> [!NOTE]
+> If you in a nix devshell: just use `k8_calc_recalc %your_expression%`
 
 **To remove everything:**
 + run `kind delete cluster`

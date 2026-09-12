@@ -8,3 +8,4 @@ venv
 pic/*
 !pic/header.png
 /*.tar.gz
+.runtime
