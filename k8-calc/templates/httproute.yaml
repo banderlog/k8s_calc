@@ -1,0 +1,23 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: k8-calc-route
+spec:
+  parentRefs:
+    - name: k8-calc-gateway
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /k8_calc
+      # overcome the exposed URL in the backend service
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: output-service
+          port: 5678

@@ -15,18 +15,28 @@ Powered with cutting edge *Foretold Termination™* technology (saves time on co
 
 ## Installation and usage
 
-**kind cluster [with ingress preparation](https://kind.sigs.k8s.io/docs/user/ingress/#using-ingress):**
+ingress-nginx is being phased out in favor of the [Gateway API](https://gateway-api.sigs.k8s.io/), so this chart routes traffic through a `Gateway`/`HTTPRoute` served by [NGINX Gateway Fabric](https://github.com/nginx/nginx-gateway-fabric) instead of an `Ingress`.
+
+**kind cluster:**
 ```
 # cluster creation with `kind`
 kind create cluster --config=./kind.yaml
+```
 
-# ingress NGINX controller
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+**Gateway API:**
+```
+# Gateway API CRDs
+kubectl kustomize "https://github.com/nginx/nginx-gateway-fabric/config/crd/gateway-api/standard?ref=v2.7.0" | kubectl apply -f -
+
+# NGINX Gateway Fabric controller
+# (pin to a chart version compatible with your cluster's k8s version --
+#  2.7.0+ requires k8s >= 1.32, older clusters need <= 2.4.0)
+helm install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway
 
 # wait until is ready to process requests running
-kubectl wait --namespace ingress-nginx \
+kubectl wait --namespace nginx-gateway \
   --for=condition=ready pod \
-  --selector=app.kubernetes.io/component=controller \
+  --selector=app.kubernetes.io/name=nginx-gateway-fabric \
   --timeout=90s
 ```
 
@@ -57,4 +67,5 @@ curl localhost/k8_calc
 - There is env string variable `calculateme` defined in the ConfigMap
 - A [busybox](https://busybox.net/) pod runs it through [bc](https://www.gnu.org/software/bc/), writes an answer to a file in the mounted volume and dies
 - A [nginx](https://www.nginx.com/) pod mounts this file as index.html, so it is accessible via an HTTP request
+- A `Gateway`/`HTTPRoute` pair routes `/k8_calc` to that pod through NGINX Gateway Fabric; a fixed NodePort (set via the `NginxProxy` resource) is what `kind.yaml`'s port mapping targets
 - The [Reloader](https://github.com/stakater/Reloader) watches ConfigMap and restarts busybox pod if it changed
