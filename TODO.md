@@ -1,3 +1,3 @@
-- [x] Ingres
+- [ ] `nix run banderlog/k8s_calc -- 4+4`
 - [ ] Argo CI/CD
 - [ ] Terraform configs for AWS/GCP/Azure
